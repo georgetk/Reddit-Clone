@@ -1,24 +1,28 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {ScreenStack} from './src/navigation';
-import {Colors} from './src/utils';
-
-const App = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <ScreenStack />
-      </NavigationContainer>
-    </SafeAreaView>
-  );
-};
+import {Provider} from 'react-redux';
+import {appColors} from './src/theme';
+import AppScreensStack from './src/navigation/appScreensStack';
+import store from './src/redux';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: appColors.white,
   },
 });
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer>
+          <AppScreensStack />
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
+  );
+};
 
 export default App;

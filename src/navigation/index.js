@@ -1,3 +1,4 @@
-import ScreenStack from './screenStack';
+import AppScreensStack from './appScreensStack';
+import ScreenNames from './screenNames';
 
-export {ScreenStack};
+export default {AppScreensStack, ScreenNames};
