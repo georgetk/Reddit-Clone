@@ -1,7 +1,7 @@
-const ScreenNames = {
+const SCREEN_NAMES = {
   LOGIN: 'login',
   POSTS: 'posts',
   COMMENTS: 'comments',
 };
 
-export default ScreenNames;
+export default SCREEN_NAMES;

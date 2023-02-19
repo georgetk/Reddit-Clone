@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LoginScreen} from '../screens/Login';
 import {PostsScreen} from '../screens/Posts';
 import {CommentsScreen} from '../screens/Comments';
-import ScreenNames from './screenNames';
+import ScreenNames from '../constants/screenNames';
 import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();

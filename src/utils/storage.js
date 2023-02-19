@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ACCESS_TOKEN = 'ACCESS_TOKEN';
-
 const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
@@ -21,4 +19,4 @@ const getData = async key => {
   }
 };
 
-export {storeData, getData, ACCESS_TOKEN};
+export {storeData, getData};

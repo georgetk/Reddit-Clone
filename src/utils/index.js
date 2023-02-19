@@ -1,4 +1,4 @@
 import {debounce} from './debounce';
-import {ACCESS_TOKEN, getData, storeData} from './storage';
+import {getData, storeData} from './storage';
 
-export {storeData, getData, ACCESS_TOKEN, debounce};
+export {storeData, getData, debounce};

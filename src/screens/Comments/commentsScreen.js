@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {AppHeader} from '../../components';
 import {commentsRequest} from '../../redux/actions';
 import {appColors} from '../../theme';
 
-const CommentsScreen = ({route}) => {
+const CommentsScreen = ({navigation, route}) => {
   const {title, subreddit, postId} = route.params;
 
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const CommentsScreen = ({route}) => {
 
   const renderItem = useCallback(
     ({item}) => (
-      <View style={{backgroundColor: 'rgba(0,0,0,0.09)', padding: 10}}>
+      <View style={{backgroundColor: appColors.opacityAdjusted, padding: 10}}>
         <Text style={{fontSize: 16}}>{item?.data?.body}</Text>
       </View>
     ),
@@ -28,7 +29,14 @@ const CommentsScreen = ({route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: appColors.white}}>
-      <Text style={{fontWeight: 'bold', fontSize: 16, marginBottom: 20}}>
+      <AppHeader onPress={() => navigation.goBack()} />
+      <Text
+        style={{
+          fontWeight: 'bold',
+          fontSize: 16,
+          marginBottom: 20,
+          marginTop: 20,
+        }}>
         {title}
       </Text>
 

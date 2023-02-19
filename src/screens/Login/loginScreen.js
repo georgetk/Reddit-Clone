@@ -1,11 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginRequest} from '../../redux/actions';
 import {appColors} from '../../theme';

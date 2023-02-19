@@ -1,4 +1,4 @@
 import AppScreensStack from './appScreensStack';
-import ScreenNames from './screenNames';
+import ScreenNames from '../constants/screenNames';
 
 export default {AppScreensStack, ScreenNames};

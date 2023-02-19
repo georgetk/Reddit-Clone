@@ -1,18 +1,27 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, Image, Pressable, Text, View} from 'react-native';
-import Video from 'react-native-video';
+import {FlatList, Pressable, Text, View} from 'react-native';
+import {SheetManager} from 'react-native-actions-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-import ScreenNames from '../../navigation/screenNames';
+import {ACTION_SHEET} from '../../components/PostFiltersActionSheet/sheets';
+import {SORT_TYPE_KEYS} from '../../constants';
+import ScreenNames from '../../constants/screenNames';
 import {postsRequest, subRedditsRequest} from '../../redux/actions';
+import {
+  postsSortPeriodChange,
+  postsSortTypeChange,
+} from '../../redux/actions/postsActions';
 import {appColors} from '../../theme';
 import {debounce} from '../../utils';
+import {sortPeriodData, sortTypeData} from './data';
+import {CustomImage, CustomVideo} from '../../components';
 
 const PostsScreen = () => {
   const dispatch = useDispatch();
 
   const {subReddits} = useSelector(state => state.subReddits);
-  const {posts} = useSelector(state => state.posts);
+  const {posts, selectedSort, selectedSortPeriodKey, selectedSortPeriodValue} =
+    useSelector(state => state.posts);
 
   const [focusedVideos, setFocusedVideos] = useState([]);
 
@@ -29,9 +38,15 @@ const PostsScreen = () => {
 
   useEffect(() => {
     if (subReddits?.[0]?.data?.display_name_prefixed?.length > 0) {
-      dispatch(postsRequest(subReddits?.[0]?.data?.display_name_prefixed));
+      dispatch(
+        postsRequest(
+          subReddits?.[0]?.data?.display_name_prefixed,
+          selectedSort,
+          selectedSortPeriodKey,
+        ),
+      );
     }
-  }, [subReddits]);
+  }, [subReddits, selectedSort, selectedSortPeriodKey]);
 
   useEffect(() => {
     console.log('posts ', posts);
@@ -39,13 +54,7 @@ const PostsScreen = () => {
 
   const renderMedia = useCallback((type, data) => {
     if (type === 'image') {
-      return (
-        <Image
-          key={data?.id}
-          style={{height: 320, width: '100%'}}
-          source={{uri: data.url}}
-        />
-      );
+      return <CustomImage id={data?.id} url={data.url} />;
     } else if (type === 'hosted:video') {
       // console.log(
       //   'is paused ',
@@ -54,12 +63,10 @@ const PostsScreen = () => {
       //   !activeVideosRef.current.includes(data?.id),
       // );
       return (
-        <Video
-          repeat
-          key={data?.id}
-          source={{uri: data.media.reddit_video.fallback_url}}
-          style={{height: 320, width: '100%'}}
-          paused={!activeVideosRef.current.includes(data?.id)}
+        <CustomVideo
+          id={data?.id}
+          url={data.media.reddit_video.fallback_url}
+          isPaused={!activeVideosRef.current.includes(data?.id)}
         />
       );
     }
@@ -72,7 +79,7 @@ const PostsScreen = () => {
       <Pressable
         key={data?.id}
         style={{
-          backgroundColor: 'rgba(0,0,0,0.09)',
+          backgroundColor: appColors.opacityAdjusted,
           padding: 10,
           width: '100%',
         }}
@@ -113,13 +120,52 @@ const PostsScreen = () => {
     [],
   );
 
+  const handleSortButtonClick = useCallback(async () => {
+    const resultObj = await SheetManager.show(ACTION_SHEET.SORT_TYPE, {
+      payload: sortTypeData,
+    });
+    dispatch(postsSortTypeChange(resultObj.key));
+
+    if (
+      resultObj.key === SORT_TYPE_KEYS.TOP ||
+      resultObj.key === SORT_TYPE_KEYS.CONTROVERSIAL
+    ) {
+      const {key, value} = await SheetManager.show(ACTION_SHEET.SORT_PERIOD, {
+        payload: sortPeriodData,
+      });
+      dispatch(
+        postsSortPeriodChange({sortPeriodKey: key, sortPeriodValue: value}),
+      );
+    }
+  }, []);
+
   return (
-    <View style={{backgroundColor: appColors.white}}>
+    <View style={{flex: 1, backgroundColor: appColors.white}}>
+      <Pressable
+        style={{
+          borderColor: appColors.blue,
+          padding: 5,
+          borderWidth: 1,
+          alignSelf: 'flex-start',
+          marginBottom: 10,
+        }}
+        onPress={handleSortButtonClick}>
+        <Text style={{fontSize: 16, color: appColors.blue}}>
+          {`${(
+            selectedSort +
+            (selectedSort === SORT_TYPE_KEYS.TOP ||
+            selectedSort === SORT_TYPE_KEYS.CONTROVERSIAL
+              ? ` ${selectedSortPeriodValue}`
+              : '')
+          )?.toUpperCase()} POSTS`}
+        </Text>
+      </Pressable>
+
       {posts?.length > 0 ? (
         <FlatList
           viewabilityConfig={{
-            itemVisiblePercentThreshold: 90,
-            minimumViewTime: 500,
+            itemVisiblePercentThreshold: 50,
+            minimumViewTime: 300,
           }}
           onViewableItemsChanged={onViewableItemsChanged}
           data={posts}

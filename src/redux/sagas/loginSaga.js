@@ -2,7 +2,8 @@ import {put, call, takeLatest} from 'redux-saga/effects';
 import {authorize} from 'react-native-app-auth';
 import {loginFailure, loginSuccess, LOGIN_REQUEST} from '../actions';
 import {authConfig} from '../services';
-import {ACCESS_TOKEN, storeData} from '../../utils';
+import {storeData} from '../../utils';
+import {STORAGE_KEYS} from '../../constants';
 
 function* login() {
   try {
@@ -10,7 +11,7 @@ function* login() {
     console.log('result ', result);
 
     if (result?.accessToken?.length > 0) {
-      storeData(ACCESS_TOKEN, result?.accessToken);
+      storeData(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken);
 
       yield put(loginSuccess(result));
     } else {
