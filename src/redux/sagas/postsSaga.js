@@ -1,9 +1,5 @@
 import {put, call, takeLatest} from 'redux-saga/effects';
-import {
-  postsFailure,
-  postsSuccess,
-  POSTS_REQUEST,
-} from '../actions/postsActions';
+import {postsFailure, postsSuccess, POSTS_REQUEST} from '../actions';
 
 import {getPosts} from '../services';
 
@@ -13,7 +9,7 @@ function* fetchPosts(action) {
     const result = yield call(getPosts, action?.payload);
     console.log('result ', result);
 
-    if (result?.data?.children?.length > 0) {
+    if (result) {
       yield put(postsSuccess(result?.data?.children));
     } else {
       yield put(

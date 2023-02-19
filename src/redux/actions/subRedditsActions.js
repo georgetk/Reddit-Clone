@@ -5,10 +5,12 @@ const SUBREDDITS_FAILURE = 'SUBREDDITS_FAILURE';
 
 // Action Creators
 const subRedditsRequest = () => ({type: SUBREDDITS_REQUEST, payload: null});
-const subRedditsSuccess = tokens => ({
+
+const subRedditsSuccess = result => ({
   type: SUBREDDITS_SUCCESS,
-  payload: tokens,
+  payload: result,
 });
+
 const subRedditsFailure = error => ({type: SUBREDDITS_FAILURE, payload: error});
 
 export {

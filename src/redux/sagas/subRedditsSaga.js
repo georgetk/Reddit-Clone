@@ -11,7 +11,7 @@ function* fetchSubreddits() {
     const result = yield call(getSubreddits);
     console.log('result ', result);
 
-    if (result?.data?.children?.length > 0) {
+    if (result) {
       yield put(subRedditsSuccess(result?.data?.children));
     } else {
       yield put(

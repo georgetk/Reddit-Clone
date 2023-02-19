@@ -1,26 +1,26 @@
-import {POSTS_FAILURE, POSTS_REQUEST, POSTS_SUCCESS} from '../actions';
+import {COMMENTS_FAILURE, COMMENTS_REQUEST, COMMENTS_SUCCESS} from '../actions';
 
 const initialState = {
   loading: false,
   error: null,
-  posts: [],
+  comments: [],
 };
 
-const postsReducer = (state = initialState, action) => {
+const commentsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case POSTS_REQUEST:
+    case COMMENTS_REQUEST:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case POSTS_SUCCESS:
+    case COMMENTS_SUCCESS:
       return {
         ...state,
         loading: false,
-        posts: action.payload,
+        comments: action.payload,
       };
-    case POSTS_FAILURE:
+    case COMMENTS_FAILURE:
       return {
         ...state,
         loading: false,
@@ -31,4 +31,4 @@ const postsReducer = (state = initialState, action) => {
   }
 };
 
-export default postsReducer;
+export default commentsReducer;

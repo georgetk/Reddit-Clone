@@ -6,8 +6,11 @@ const LOGOUT = 'LOGOUT';
 
 // Action Creators
 const loginRequest = () => ({type: LOGIN_REQUEST, payload: null});
+
 const loginSuccess = tokens => ({type: LOGIN_SUCCESS, payload: tokens});
+
 const loginFailure = error => ({type: LOGIN_FAILURE, payload: error});
+
 const logout = () => ({type: LOGOUT, payload: null});
 
 export {

@@ -4,14 +4,16 @@ const POSTS_SUCCESS = 'POSTS_SUCCESS';
 const POSTS_FAILURE = 'POSTS_FAILURE';
 
 // Action Creators
-const postsRequest = subRedditName => ({
+const postsRequest = subreddit => ({
   type: POSTS_REQUEST,
-  payload: subRedditName,
+  payload: subreddit,
 });
-const postsSuccess = tokens => ({
+
+const postsSuccess = result => ({
   type: POSTS_SUCCESS,
-  payload: tokens,
+  payload: result,
 });
+
 const postsFailure = error => ({type: POSTS_FAILURE, payload: error});
 
 export {

@@ -1,10 +1,12 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, Image, Text, View} from 'react-native';
+import {FlatList, Image, Pressable, Text, View} from 'react-native';
 import Video from 'react-native-video';
 import {useDispatch, useSelector} from 'react-redux';
-import {subRedditsRequest} from '../../redux/actions';
-import {postsRequest} from '../../redux/actions/postsActions';
+import ScreenNames from '../../navigation/screenNames';
+import {postsRequest, subRedditsRequest} from '../../redux/actions';
 import {appColors} from '../../theme';
+import {debounce} from '../../utils';
 
 const PostsScreen = () => {
   const dispatch = useDispatch();
@@ -15,10 +17,11 @@ const PostsScreen = () => {
   const [focusedVideos, setFocusedVideos] = useState([]);
 
   const activeVideosRef = useRef([]);
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log('currently activeVideosRef.current ', activeVideosRef.current);
-  }, [activeVideosRef.current]);
+  // useEffect(() => {
+  //   console.log('currently activeVideosRef.current ', activeVideosRef.current);
+  // }, [activeVideosRef.current]);
 
   useEffect(() => {
     dispatch(subRedditsRequest());
@@ -30,6 +33,10 @@ const PostsScreen = () => {
     }
   }, [subReddits]);
 
+  useEffect(() => {
+    console.log('posts ', posts);
+  }, [posts]);
+
   const renderMedia = useCallback((type, data) => {
     if (type === 'image') {
       return (
@@ -40,12 +47,12 @@ const PostsScreen = () => {
         />
       );
     } else if (type === 'hosted:video') {
-      console.log(
-        'is paused ',
-        data?.id,
-        ' ',
-        !activeVideosRef.current.includes(data?.id),
-      );
+      // console.log(
+      //   'is paused ',
+      //   data?.id,
+      //   ' ',
+      //   !activeVideosRef.current.includes(data?.id),
+      // );
       return (
         <Video
           repeat
@@ -62,54 +69,63 @@ const PostsScreen = () => {
   const renderItem = useCallback(({item}) => {
     const {data} = item;
     return (
-      <View
+      <Pressable
         key={data?.id}
         style={{
-          backgroundColor: 'rgba(0,0,0,0.2)',
+          backgroundColor: 'rgba(0,0,0,0.09)',
+          padding: 10,
           width: '100%',
+        }}
+        onPress={() => {
+          navigation.navigate(ScreenNames.COMMENTS, {
+            title: data?.title,
+            subreddit: data?.subreddit_name_prefixed,
+            postId: data?.id,
+          });
         }}>
         <Text style={{fontWeight: 'bold', fontSize: 16}}>{data.title}</Text>
         {renderMedia(data.post_hint, data)}
-      </View>
+      </Pressable>
     );
   }, []);
 
-  const viewabilityConfig = {
-    itemVisiblePercentThreshold: 90,
-    minimumViewTime: 0,
-  };
+  const onViewableItemsChanged = useCallback(
+    debounce(({viewableItems}) => {
+      //  console.log('Visible items are', viewableItems);
+      //  console.log('Changed in this iteration', changed);
+      const viewableItemsUniqueKeys = [];
+      viewableItems.forEach(item => {
+        if (item?.item?.data?.post_hint === 'hosted:video') {
+          viewableItemsUniqueKeys.push(item?.item?.data?.id);
+        }
+      });
+      //   console.log('viewableItemsUniqueKeys ', viewableItemsUniqueKeys);
 
-  const onViewableItemsChanged = useCallback(({viewableItems, changed}) => {
-    //  console.log('Visible items are', viewableItems);
-    //  console.log('Changed in this iteration', changed);
-    const viewableItemsUniqueKeys = [];
-    viewableItems.forEach(item => {
-      if (item?.item?.data?.post_hint === 'hosted:video') {
-        viewableItemsUniqueKeys.push(item?.item?.data?.id);
+      if (viewableItemsUniqueKeys?.length > 0) {
+        activeVideosRef.current = [...viewableItemsUniqueKeys];
+        setFocusedVideos(...viewableItemsUniqueKeys);
+      } else {
+        activeVideosRef.current = [];
+
+        setFocusedVideos([]);
       }
-    });
-    console.log('viewableItemsUniqueKeys ', viewableItemsUniqueKeys);
-
-    if (viewableItemsUniqueKeys?.length > 0) {
-      activeVideosRef.current = [...viewableItemsUniqueKeys];
-      setFocusedVideos(...viewableItemsUniqueKeys);
-    } else {
-      activeVideosRef.current = [];
-
-      setFocusedVideos([]);
-    }
-  }, []);
+    }),
+    [],
+  );
 
   return (
     <View style={{backgroundColor: appColors.white}}>
       {posts?.length > 0 ? (
         <FlatList
-          viewabilityConfig={viewabilityConfig}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 90,
+            minimumViewTime: 500,
+          }}
           onViewableItemsChanged={onViewableItemsChanged}
           data={posts}
           renderItem={renderItem}
           keyExtractor={item => item?.data?.id}
-          ItemSeparatorComponent={() => <View style={{height: 50}} />}
+          ItemSeparatorComponent={() => <View style={{height: 10}} />}
         />
       ) : null}
     </View>

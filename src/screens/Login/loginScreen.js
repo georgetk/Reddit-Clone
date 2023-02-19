@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginRequest} from '../../redux/actions';
+import {appColors} from '../../theme';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const LoginScreen = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: appColors.white,
       }}>
       {/* {!loading ? (
         <View

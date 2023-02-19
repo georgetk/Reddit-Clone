@@ -1,4 +1,12 @@
 import {
+  commentsFailure,
+  commentsRequest,
+  commentsSuccess,
+  COMMENTS_FAILURE,
+  COMMENTS_REQUEST,
+  COMMENTS_SUCCESS,
+} from './commentsAction';
+import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -8,6 +16,14 @@ import {
   loginFailure,
   logout,
 } from './loginActions';
+import {
+  postsFailure,
+  postsRequest,
+  postsSuccess,
+  POSTS_FAILURE,
+  POSTS_REQUEST,
+  POSTS_SUCCESS,
+} from './postsActions';
 import {
   SUBREDDITS_REQUEST,
   SUBREDDITS_SUCCESS,
@@ -32,4 +48,16 @@ export {
   subRedditsRequest,
   subRedditsSuccess,
   subRedditsFailure,
+  POSTS_REQUEST,
+  POSTS_SUCCESS,
+  POSTS_FAILURE,
+  postsRequest,
+  postsSuccess,
+  postsFailure,
+  COMMENTS_REQUEST,
+  COMMENTS_SUCCESS,
+  COMMENTS_FAILURE,
+  commentsRequest,
+  commentsSuccess,
+  commentsFailure,
 };

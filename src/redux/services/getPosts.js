@@ -1,4 +1,4 @@
 import {get} from './apiClient';
 
-export const getPosts = (subRedditName, sortType = '') =>
-  get(`/${subRedditName}${sortType?.length > 0 ? `/${sortType}` : ''}`);
+export const getPosts = (subreddit, sortType = '') =>
+  get(`/${subreddit}${sortType?.length > 0 ? `/${sortType}` : ''}`);
