@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {FlatList, Pressable, Text} from 'react-native';
+import {Pressable, Text} from 'react-native';
 import {SCREEN_NAMES} from '../../constants';
 import {appColors} from '../../theme';
 import CustomImage from '../CustomImage';
+import CustomList from '../CustomList';
 import CustomVideo from '../CustomVideo';
-import ListSeparator from '../ListSeparator';
 
 const PostList = ({posts, onViewableItemsChanged, videoRef}) => {
   const navigation = useNavigation();
@@ -44,6 +44,8 @@ const PostList = ({posts, onViewableItemsChanged, videoRef}) => {
           backgroundColor: appColors.opacityAdjusted,
           padding: 10,
           width: '100%',
+          borderWidth: 1,
+          borderColor: appColors.blue,
         }}
         onPress={() => {
           navigation.navigate(SCREEN_NAMES.COMMENTS, {
@@ -59,15 +61,13 @@ const PostList = ({posts, onViewableItemsChanged, videoRef}) => {
   }, []);
 
   return (
-    <FlatList
+    <CustomList
+      data={posts}
+      renderItem={renderItem}
       viewabilityConfig={{
         itemVisiblePercentThreshold: 50,
       }}
       onViewableItemsChanged={onViewableItemsChanged}
-      data={posts}
-      renderItem={renderItem}
-      keyExtractor={item => item?.data?.id}
-      ItemSeparatorComponent={() => <ListSeparator />}
     />
   );
 };

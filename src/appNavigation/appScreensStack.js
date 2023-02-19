@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {LoginScreen} from '../screens/Login';
-import {PostsScreen} from '../screens/Posts';
-import {CommentsScreen} from '../screens/Comments';
+import LoginScreen from '../screens/Login';
+import PostsScreen from '../screens/Posts';
+import CommentsScreen from '../screens/Comments';
 import ScreenNames from '../constants/screenNames';
 import {useSelector} from 'react-redux';
+import SubredditsScreen from '../screens/Subreddits';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,10 @@ const AppScreensStack = () => {
       ) : (
         // User is signed in
         <>
+          <Stack.Screen
+            name={ScreenNames.SUBREDDITS}
+            component={SubredditsScreen}
+          />
           <Stack.Screen name={ScreenNames.POSTS} component={PostsScreen} />
           <Stack.Screen
             name={ScreenNames.COMMENTS}

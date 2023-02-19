@@ -1,7 +1,8 @@
 const SCREEN_NAMES = {
-  LOGIN: 'login',
-  POSTS: 'posts',
-  COMMENTS: 'comments',
+  LOGIN: 'LOGIN',
+  SUBREDDITS: 'SUBREDDITS',
+  POSTS: 'POSTS',
+  COMMENTS: 'COMMENTS',
 };
 
 export default SCREEN_NAMES;

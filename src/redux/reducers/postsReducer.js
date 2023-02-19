@@ -41,14 +41,14 @@ const postsReducer = (state = initialState, action) => {
     case POSTS_SORT_TYPE_CHANGE_SUCCESS:
       return {
         ...state,
-        loading: true,
+        loading: false,
         selectedSort: action.payload,
       };
     case POSTS_SORT_PERIOD_CHANGE_SUCCESS:
       const {payload} = action;
       return {
         ...state,
-        loading: true,
+        loading: false,
         selectedSortPeriodKey: payload.sortPeriodKey,
         selectedSortPeriodValue: payload.sortPeriodValue,
       };
