@@ -8,7 +8,6 @@ import {STORAGE_KEYS} from '../../constants';
 function* login() {
   try {
     const result = yield call(authorize, authConfig);
-    console.log('result ', result);
 
     if (result?.accessToken?.length > 0) {
       storeData(STORAGE_KEYS.ACCESS_TOKEN, result?.accessToken);
@@ -22,8 +21,6 @@ function* login() {
       );
     }
   } catch (error) {
-    console.log('error ', error);
-
     yield put(
       loginFailure(
         'Something went wrong while logging you in. Please try again.',
@@ -33,6 +30,5 @@ function* login() {
 }
 
 export default function* watchLogin() {
-  console.log('watchLogin invoked');
   yield takeLatest(LOGIN_REQUEST, login);
 }

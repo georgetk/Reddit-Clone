@@ -1,4 +1,4 @@
-export const debounce = (func, timeout = 300) => {
+export const customDebounce = (func, timeout = 300) => {
   let timer;
   return (...args) => {
     clearTimeout(timer);

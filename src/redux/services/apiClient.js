@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { STORAGE_KEYS } from '../../constants';
+import {STORAGE_KEYS} from '../../constants';
 import {getData} from '../../utils';
 
 const BASE_URL = 'https://oauth.reddit.com';
@@ -26,8 +26,6 @@ axiosApi.interceptors.response.use(
 );
 
 export const get = async (url, config) => {
-  console.log('get url ', url);
-
   return await axiosApi
     .get(url, {
       ...config,

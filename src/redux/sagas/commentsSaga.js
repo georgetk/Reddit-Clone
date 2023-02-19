@@ -4,9 +4,7 @@ import {getComments} from '../services/getComments';
 
 function* fetchComments(action) {
   try {
-    console.log('fetchComments action ', action);
     const result = yield call(getComments, action?.payload);
-    console.log('getComments result ', result);
 
     if (result) {
       yield put(commentsSuccess(result?.[1]?.data?.children));
@@ -18,8 +16,6 @@ function* fetchComments(action) {
       );
     }
   } catch (error) {
-    console.log('error ', error);
-
     yield put(
       commentsFailure(
         'Something went wrong while fetching the comments. Please try again.',
@@ -29,6 +25,5 @@ function* fetchComments(action) {
 }
 
 export default function* watchComments() {
-  console.log('watchComments invoked');
   yield takeLatest(COMMENTS_REQUEST, fetchComments);
 }

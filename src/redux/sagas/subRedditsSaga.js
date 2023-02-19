@@ -9,7 +9,6 @@ import {getSubreddits} from '../services';
 function* fetchSubreddits() {
   try {
     const result = yield call(getSubreddits);
-    console.log('result ', result);
 
     if (result) {
       yield put(subRedditsSuccess(result?.data?.children));
@@ -21,8 +20,6 @@ function* fetchSubreddits() {
       );
     }
   } catch (error) {
-    console.log('error ', error);
-
     yield put(
       subRedditsFailure(
         'Something went wrong while fetching sub reddits. Please try again.',
@@ -32,6 +29,5 @@ function* fetchSubreddits() {
 }
 
 export default function* watchSubReddits() {
-  console.log('watchSubReddits invoked');
   yield takeLatest(SUBREDDITS_REQUEST, fetchSubreddits);
 }

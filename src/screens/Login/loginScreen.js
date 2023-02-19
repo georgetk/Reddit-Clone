@@ -1,12 +1,13 @@
 import React, {useCallback, useEffect} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {Loader} from '../../components';
 import {loginRequest} from '../../redux/actions';
 import {appColors} from '../../theme';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
-  const {loading, error} = useSelector(state => state.login);
+  const {loading} = useSelector(state => state.login);
 
   useEffect(() => {}, []);
 
@@ -22,22 +23,8 @@ const LoginScreen = () => {
         alignItems: 'center',
         backgroundColor: appColors.white,
       }}>
-      {/* {!loading ? (
-        <View
-          style={{
-            ...StyleSheet.absoluteFill,
-            alignSelf: 'center',
-            position: 'absolute',
-            flex: 1,
-            elevation: 1,
-            width: '100%',
-            height: '100%',
-          // backgroundColor: 'rgba(0,0,0,0.5)',
-            justifyContent: 'center',
-          }}>
-          <ActivityIndicator />
-        </View>
-      ) : null} */}
+      {loading ? <Loader /> : null}
+
       <Pressable
         onPress={handleLogin}
         style={{

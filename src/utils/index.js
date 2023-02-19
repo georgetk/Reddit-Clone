@@ -1,4 +1,4 @@
-import {debounce} from './debounce';
+import {customDebounce} from './debounce';
 import {getData, storeData} from './storage';
 
-export {storeData, getData, debounce};
+export {storeData, getData, customDebounce};

@@ -1,36 +1,32 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, Pressable, Text, View} from 'react-native';
+import React, {createRef, useCallback, useEffect, useRef} from 'react';
+import {Pressable, Text, View} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {ACTION_SHEET} from '../../components/PostFiltersActionSheet/sheets';
 import {SORT_TYPE_KEYS} from '../../constants';
-import ScreenNames from '../../constants/screenNames';
 import {postsRequest, subRedditsRequest} from '../../redux/actions';
 import {
   postsSortPeriodChange,
   postsSortTypeChange,
 } from '../../redux/actions/postsActions';
 import {appColors} from '../../theme';
-import {debounce} from '../../utils';
 import {sortPeriodData, sortTypeData} from './data';
-import {CustomImage, CustomVideo} from '../../components';
+import {Loader} from '../../components';
+import PostList from '../../components/PostList';
 
 const PostsScreen = () => {
   const dispatch = useDispatch();
 
   const {subReddits} = useSelector(state => state.subReddits);
-  const {posts, selectedSort, selectedSortPeriodKey, selectedSortPeriodValue} =
-    useSelector(state => state.posts);
+  const {
+    posts,
+    selectedSort,
+    selectedSortPeriodKey,
+    selectedSortPeriodValue,
+    loading,
+  } = useSelector(state => state.posts);
 
-  const [focusedVideos, setFocusedVideos] = useState([]);
-
-  const activeVideosRef = useRef([]);
-  const navigation = useNavigation();
-
-  // useEffect(() => {
-  //   console.log('currently activeVideosRef.current ', activeVideosRef.current);
-  // }, [activeVideosRef.current]);
+  const videoRef = useRef([]);
 
   useEffect(() => {
     dispatch(subRedditsRequest());
@@ -49,76 +45,12 @@ const PostsScreen = () => {
   }, [subReddits, selectedSort, selectedSortPeriodKey]);
 
   useEffect(() => {
-    console.log('posts ', posts);
-  }, [posts]);
-
-  const renderMedia = useCallback((type, data) => {
-    if (type === 'image') {
-      return <CustomImage id={data?.id} url={data.url} />;
-    } else if (type === 'hosted:video') {
-      // console.log(
-      //   'is paused ',
-      //   data?.id,
-      //   ' ',
-      //   !activeVideosRef.current.includes(data?.id),
-      // );
-      return (
-        <CustomVideo
-          id={data?.id}
-          url={data.media.reddit_video.fallback_url}
-          isPaused={!activeVideosRef.current.includes(data?.id)}
-        />
-      );
-    }
-    return;
-  }, []);
-
-  const renderItem = useCallback(({item}) => {
-    const {data} = item;
-    return (
-      <Pressable
-        key={data?.id}
-        style={{
-          backgroundColor: appColors.opacityAdjusted,
-          padding: 10,
-          width: '100%',
-        }}
-        onPress={() => {
-          navigation.navigate(ScreenNames.COMMENTS, {
-            title: data?.title,
-            subreddit: data?.subreddit_name_prefixed,
-            postId: data?.id,
-          });
-        }}>
-        <Text style={{fontWeight: 'bold', fontSize: 16}}>{data.title}</Text>
-        {renderMedia(data.post_hint, data)}
-      </Pressable>
-    );
-  }, []);
-
-  const onViewableItemsChanged = useCallback(
-    debounce(({viewableItems}) => {
-      //  console.log('Visible items are', viewableItems);
-      //  console.log('Changed in this iteration', changed);
-      const viewableItemsUniqueKeys = [];
-      viewableItems.forEach(item => {
-        if (item?.item?.data?.post_hint === 'hosted:video') {
-          viewableItemsUniqueKeys.push(item?.item?.data?.id);
-        }
-      });
-      //   console.log('viewableItemsUniqueKeys ', viewableItemsUniqueKeys);
-
-      if (viewableItemsUniqueKeys?.length > 0) {
-        activeVideosRef.current = [...viewableItemsUniqueKeys];
-        setFocusedVideos(...viewableItemsUniqueKeys);
-      } else {
-        activeVideosRef.current = [];
-
-        setFocusedVideos([]);
+    posts.forEach(item => {
+      if (item?.data?.post_hint === 'hosted:video') {
+        videoRef[item?.data?.id] = createRef();
       }
-    }),
-    [],
-  );
+    });
+  }, [posts]);
 
   const handleSortButtonClick = useCallback(async () => {
     const resultObj = await SheetManager.show(ACTION_SHEET.SORT_TYPE, {
@@ -137,6 +69,22 @@ const PostsScreen = () => {
         postsSortPeriodChange({sortPeriodKey: key, sortPeriodValue: value}),
       );
     }
+  }, []);
+
+  const onViewableItemsChanged = useCallback(({changed}) => {
+    changed.forEach(item => {
+      const videoItem = videoRef[item.key];
+      if (
+        videoItem?.current &&
+        item?.item?.data?.post_hint === 'hosted:video'
+      ) {
+        if (item.isViewable) {
+          videoItem?.current?.play();
+        } else {
+          videoItem?.current?.pause();
+        }
+      }
+    });
   }, []);
 
   return (
@@ -160,18 +108,12 @@ const PostsScreen = () => {
           )?.toUpperCase()} POSTS`}
         </Text>
       </Pressable>
-
+      {loading ? <Loader /> : null}
       {posts?.length > 0 ? (
-        <FlatList
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 50,
-            minimumViewTime: 300,
-          }}
+        <PostList
+          posts={posts}
           onViewableItemsChanged={onViewableItemsChanged}
-          data={posts}
-          renderItem={renderItem}
-          keyExtractor={item => item?.data?.id}
-          ItemSeparatorComponent={() => <View style={{height: 10}} />}
+          videoRef={videoRef}
         />
       ) : null}
     </View>
