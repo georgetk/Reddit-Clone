@@ -3,8 +3,8 @@ import React, {useCallback} from 'react';
 import {Pressable} from 'react-native';
 import {CustomText} from '../../../components';
 import {commonStyles, SCREEN_NAMES} from '../../../constants';
-import RenderMedia from '../RenderMedia';
 import styles from './styles';
+import {RenderMediaMemoized} from '../RenderMedia';
 
 const PostItem = ({data, index, videoRef}) => {
   const navigation = useNavigation();
@@ -23,7 +23,7 @@ const PostItem = ({data, index, videoRef}) => {
       style={styles.pressable}
       onPress={() => handleOnPress(data)}>
       <CustomText string={data.title} style={commonStyles.bold20} />
-      <RenderMedia data={data} index={index} videoRef={videoRef} />
+      <RenderMediaMemoized data={data} index={index} videoRef={videoRef} />
     </Pressable>
   );
 };

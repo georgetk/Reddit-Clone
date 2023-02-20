@@ -33,7 +33,7 @@ const CommentsScreen = ({navigation, route}) => {
       {comments?.length > 0 ? (
         <CustomList
           data={comments}
-          renderItem={item => <CommentItemMemoized item={item} />}
+          renderItem={({item}) => <CommentItemMemoized item={item} />}
         />
       ) : null}
     </View>

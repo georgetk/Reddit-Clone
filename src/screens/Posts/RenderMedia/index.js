@@ -28,4 +28,4 @@ const RenderMedia = ({data, index, videoRef}) => {
   return <View />;
 };
 
-export default RenderMedia;
+export const RenderMediaMemoized = RenderMedia;

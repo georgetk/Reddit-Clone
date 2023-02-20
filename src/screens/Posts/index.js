@@ -17,8 +17,6 @@ import PostItemMemoized from './PostItem';
 const PostsScreen = ({navigation, route}) => {
   const {selectedSubreddit} = route.params;
 
-console.log('selectedSubreddit ',selectedSubreddit);
-
   const dispatch = useDispatch();
 
   const {
@@ -40,7 +38,6 @@ console.log('selectedSubreddit ',selectedSubreddit);
   }, [selectedSubreddit, selectedSort, selectedSortPeriodKey]);
 
   useEffect(() => {
-    console.log('posts ', posts);
     posts.forEach(item => {
       if (item?.data?.post_hint === 'hosted:video') {
         videoRef[item?.data?.id] = createRef();
@@ -113,7 +110,11 @@ console.log('selectedSubreddit ',selectedSubreddit);
         <CustomList
           data={posts}
           renderItem={({item, index}) => (
-            <PostItemMemoized data={item.data} index={index} videoRef={videoRef} />
+            <PostItemMemoized
+              data={item.data}
+              index={index}
+              videoRef={videoRef}
+            />
           )}
           viewabilityConfig={{
             itemVisiblePercentThreshold: 50,
