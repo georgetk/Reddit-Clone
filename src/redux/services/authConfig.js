@@ -4,31 +4,20 @@ const REDDIT_AUTH_REDIRECT_URL = 'com.redditclone://redirect';
 
 const REDDIT_CLIENT_SECRET = 'qPvjx1U4j76Avp66wQtEBA';
 
+const REDDIT_CLIENT_SECRET_BASE64_ENCODE = 'cVB2angxVTRqNzZBdnA2NndRdEVCQQ==';
+
 const authConfig = {
   redirectUrl: REDDIT_AUTH_REDIRECT_URL,
   clientId: REDDIT_CLIENT_SECRET,
   clientSecret: '',
-  scopes: [
-    'identity',
-    'edit',
-    'subscribe',
-    'save',
-    'submit',
-    'read',
-    'modconfig',
-    'account',
-    'vote',
-    'flair',
-    'mysubreddits',
-    'modposts',
-  ],
+  scopes: ['read', 'mysubreddits'],
   serviceConfiguration: {
     authorizationEndpoint: `${REDDIT_AUTH_BASE_URL}authorize.compact`,
     tokenEndpoint: `${REDDIT_AUTH_BASE_URL}access_token`,
   },
   customHeaders: {
     token: {
-      Authorization: 'Basic cVB2angxVTRqNzZBdnA2NndRdEVCQQ==',
+      Authorization: `Basic ${REDDIT_CLIENT_SECRET_BASE64_ENCODE}`,
     },
   },
 };
