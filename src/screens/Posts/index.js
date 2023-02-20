@@ -10,12 +10,14 @@ import {
   postsSortTypeChange,
 } from '../../redux/actions/postsActions';
 import {sortPeriodData, sortTypeData} from './data';
-import {AppHeader, CustomText, Loader} from '../../components';
-import PostList from '../../components/PostList';
+import {AppHeader, CustomList, CustomText, Loader} from '../../components';
 import styles from './styles';
+import PostItemMemoized from './PostItem';
 
 const PostsScreen = ({navigation, route}) => {
   const {selectedSubreddit} = route.params;
+
+console.log('selectedSubreddit ',selectedSubreddit);
 
   const dispatch = useDispatch();
 
@@ -38,6 +40,7 @@ const PostsScreen = ({navigation, route}) => {
   }, [selectedSubreddit, selectedSort, selectedSortPeriodKey]);
 
   useEffect(() => {
+    console.log('posts ', posts);
     posts.forEach(item => {
       if (item?.data?.post_hint === 'hosted:video') {
         videoRef[item?.data?.id] = createRef();
@@ -64,8 +67,15 @@ const PostsScreen = ({navigation, route}) => {
     }
   }, []);
 
-  const onViewableItemsChanged = useCallback(({changed}) => {
-    changed.forEach(item => {
+  const onViewableItemsChanged = useCallback(({viewableItems, changed}) => {
+    const uniqueKeys = new Set(viewableItems.map(item => item.key));
+
+    const combinedItems = [
+      ...viewableItems,
+      ...changed.filter(item => !uniqueKeys.has(item.key)),
+    ];
+
+    combinedItems.forEach(item => {
       const videoItem = videoRef[item.key];
       if (
         videoItem?.current &&
@@ -100,10 +110,15 @@ const PostsScreen = ({navigation, route}) => {
       {loading ? <Loader /> : null}
 
       {posts?.length > 0 ? (
-        <PostList
-          posts={posts}
+        <CustomList
+          data={posts}
+          renderItem={({item, index}) => (
+            <PostItemMemoized data={item.data} index={index} videoRef={videoRef} />
+          )}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 50,
+          }}
           onViewableItemsChanged={onViewableItemsChanged}
-          videoRef={videoRef}
         />
       ) : null}
     </View>

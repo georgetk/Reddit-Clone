@@ -7,7 +7,7 @@ const AppHeader = ({navigation}) => {
   const handleBackPress = useCallback(() => navigation.goBack(), []);
 
   return (
-    <Pressable hitSlop={70} onPress={handleBackPress}>
+    <Pressable hitSlop={50} onPress={handleBackPress}>
       <CustomText string={'Back'} style={styles.defaultStyle} />
     </Pressable>
   );

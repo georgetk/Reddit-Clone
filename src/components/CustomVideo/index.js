@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, memo, useImperativeHandle, useState} from 'react';
 import Video from 'react-native-video';
 import {commonStyles} from '../../constants';
 
@@ -26,4 +26,6 @@ const CustomVideo = forwardRef((props, ref) => {
   );
 });
 
-export default CustomVideo;
+const CustomVideoMemoized = memo(CustomVideo);
+
+export default CustomVideoMemoized;

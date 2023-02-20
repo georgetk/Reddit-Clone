@@ -1,9 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppHeader, CustomList, CustomText, Loader} from '../../components';
 import {commonStyles} from '../../constants';
 import {commentsRequest} from '../../redux/actions';
+import {CommentItemMemoized} from './CommentItem';
 import styles from './styles';
 
 const CommentsScreen = ({navigation, route}) => {
@@ -19,15 +20,6 @@ const CommentsScreen = ({navigation, route}) => {
     }
   }, [subreddit, postId]);
 
-  const renderItem = useCallback(
-    ({item}) => (
-      <View style={styles.itemContainer}>
-        <CustomText string={item?.data?.body} />
-      </View>
-    ),
-    [],
-  );
-
   return (
     <View style={commonStyles.whiteContainer}>
       <AppHeader navigation={navigation} />
@@ -39,7 +31,10 @@ const CommentsScreen = ({navigation, route}) => {
       {loading ? <Loader /> : null}
 
       {comments?.length > 0 ? (
-        <CustomList data={comments} renderItem={renderItem} />
+        <CustomList
+          data={comments}
+          renderItem={item => <CommentItemMemoized item={item} />}
+        />
       ) : null}
     </View>
   );

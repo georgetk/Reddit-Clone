@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {appColors} from '../../theme';
+import {appColors} from '../../../theme';
 
 const styles = StyleSheet.create({
   pressable: {

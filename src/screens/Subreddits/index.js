@@ -1,10 +1,11 @@
-import React, {useCallback, useEffect} from 'react';
-import {Pressable, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {CustomList, CustomText, Loader} from '../../components';
-import {commonStyles, SCREEN_NAMES} from '../../constants';
+import {commonStyles} from '../../constants';
 import {subRedditsRequest} from '../../redux/actions';
 import styles from './styles';
+import {SubredditItemMemoized} from './SubredditItem';
 
 const SubredditsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -15,29 +16,6 @@ const SubredditsScreen = ({navigation}) => {
     dispatch(subRedditsRequest());
   }, []);
 
-  const handlePress = useCallback(
-    item =>
-      navigation.navigate(SCREEN_NAMES.POSTS, {
-        selectedSubreddit: item?.item?.data?.display_name_prefixed,
-      }),
-    [],
-  );
-
-  const renderItem = useCallback(
-    item => (
-      <Pressable
-        hitSlop={70}
-        style={styles.pressable}
-        onPress={() => handlePress(item)}>
-        <CustomText
-          string={item?.item.data?.display_name_prefixed}
-          style={styles.subredditName}
-        />
-      </Pressable>
-    ),
-    [],
-  );
-
   return (
     <View style={commonStyles.whiteContainer}>
       <CustomText
@@ -45,11 +23,16 @@ const SubredditsScreen = ({navigation}) => {
         style={[commonStyles.bold20, styles.headerText]}
       />
 
-      {loading ? (
-        <Loader />
-      ) : (
-        <CustomList data={subReddits} renderItem={renderItem} />
-      )}
+      {loading ? <Loader /> : null}
+
+      {subReddits?.length > 0 ? (
+        <CustomList
+          data={subReddits}
+          renderItem={item => (
+            <SubredditItemMemoized item={item} navigation={navigation} />
+          )}
+        />
+      ) : null}
     </View>
   );
 };
