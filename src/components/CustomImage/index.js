@@ -1,10 +1,11 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image';
+import {commonStyles} from '../../constants';
 
 const CustomImage = ({id, url}) => (
   <FastImage
     key={id}
-    style={{height: 320, width: '100%'}}
+    style={commonStyles.mediaContainer}
     source={{
       uri: url,
     }}

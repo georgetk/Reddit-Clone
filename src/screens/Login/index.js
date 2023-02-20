@@ -1,12 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {Loader} from '../../components';
+import {CustomText, Loader} from '../../components';
+import {commonStyles} from '../../constants';
 import {loginRequest} from '../../redux/actions';
-import {appColors} from '../../theme';
+import styles from './styles';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
+
   const {loading} = useSelector(state => state.login);
 
   useEffect(() => {}, []);
@@ -16,25 +18,11 @@ const LoginScreen = () => {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: appColors.white,
-      }}>
+    <View style={[commonStyles.whiteContainer, styles.container]}>
       {loading ? <Loader /> : null}
 
-      <Pressable
-        onPress={handleLogin}
-        style={{
-          backgroundColor: 'salmon',
-          width: '80%',
-          height: 70,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>LOGIN</Text>
+      <Pressable onPress={handleLogin} style={styles.pressable}>
+        <CustomText string={'LOGIN'} style={commonStyles.bold20} />
       </Pressable>
     </View>
   );

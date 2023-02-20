@@ -1,3 +1,4 @@
+import commonStyles from './commonStyles';
 import {
   SORT_TYPE_KEYS,
   SORT_TYPE_VALUES,
@@ -14,4 +15,5 @@ export {
   SORT_PERIOD_VALUES,
   SCREEN_NAMES,
   STORAGE_KEYS,
+  commonStyles,
 };

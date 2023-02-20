@@ -1,5 +1,6 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import Video from 'react-native-video';
+import {commonStyles} from '../../constants';
 
 const CustomVideo = forwardRef((props, ref) => {
   const [pause, setPause] = useState(props.isPaused);
@@ -17,10 +18,10 @@ const CustomVideo = forwardRef((props, ref) => {
     <Video
       repeat
       key={props.id}
-      style={{height: 320, width: '100%'}}
+      style={commonStyles.mediaContainer}
       source={{uri: props.url}}
       paused={pause}
-      resizeMode="cover" 
+      resizeMode="cover"
     />
   );
 });

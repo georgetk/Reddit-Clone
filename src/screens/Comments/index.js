@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppHeader, CustomList, Loader} from '../../components';
+import {AppHeader, CustomList, CustomText, Loader} from '../../components';
+import {commonStyles} from '../../constants';
 import {commentsRequest} from '../../redux/actions';
-import {appColors} from '../../theme';
+import styles from './styles';
 
 const CommentsScreen = ({navigation, route}) => {
   const {title, subreddit, postId} = route.params;
@@ -20,25 +21,20 @@ const CommentsScreen = ({navigation, route}) => {
 
   const renderItem = useCallback(
     ({item}) => (
-      <View style={{backgroundColor: appColors.opacityAdjusted, padding: 10}}>
-        <Text style={{fontSize: 16}}>{item?.data?.body}</Text>
+      <View style={styles.itemContainer}>
+        <CustomText string={item?.data?.body} />
       </View>
     ),
     [],
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: appColors.white}}>
-      <AppHeader onPress={() => navigation.goBack()} />
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 16,
-          marginBottom: 20,
-          marginTop: 20,
-        }}>
-        {title}
-      </Text>
+    <View style={commonStyles.whiteContainer}>
+      <AppHeader navigation={navigation} />
+      <CustomText
+        string={title}
+        style={[commonStyles.bold20, styles.titleText]}
+      />
 
       {loading ? <Loader /> : null}
 

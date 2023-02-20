@@ -3,10 +3,10 @@ import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import {appColors} from './src/theme';
-import AppScreensStack from './src/appNavigation/appScreensStack';
 import store from './src/redux';
 import {SheetProvider} from 'react-native-actions-sheet';
 import './src/components/PostFiltersActionSheet/sheets';
+import AppScreensStack from './src/appNavigation';
 
 const styles = StyleSheet.create({
   container: {

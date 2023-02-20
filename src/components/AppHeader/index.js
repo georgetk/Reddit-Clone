@@ -1,13 +1,16 @@
-import React from 'react';
-import {Pressable, Text, View} from 'react-native';
-import {appColors} from '../../theme';
+import React, {useCallback} from 'react';
+import {Pressable} from 'react-native';
+import CustomText from '../CustomText';
+import styles from './styles';
 
-const AppHeader = ({onPress}) => (
-  <View>
-    <Pressable hitSlop={70} onPress={onPress}>
-      <Text style={{fontSize: 16, color: appColors.blue}}>Back</Text>
+const AppHeader = ({navigation}) => {
+  const handleBackPress = useCallback(() => navigation.goBack(), []);
+
+  return (
+    <Pressable hitSlop={70} onPress={handleBackPress}>
+      <CustomText string={'Back'} style={styles.defaultStyle} />
     </Pressable>
-  </View>
-);
+  );
+};
 
 export default AppHeader;

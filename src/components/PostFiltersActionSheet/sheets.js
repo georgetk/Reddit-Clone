@@ -1,13 +1,12 @@
 import {registerSheet} from 'react-native-actions-sheet';
-import PostSortPeriodActionSheet from './postSortPeriodActionSheet';
-import PostSortTypeActionSheet from './postSortTypeActionSheet';
+import PostsSortActionSheet from './postsSortActionSheet';
 
 const ACTION_SHEET = {
   SORT_TYPE: 'postSortTypeActionSheet',
   SORT_PERIOD: 'postSortPeriodActionSheet',
 };
 
-registerSheet('postSortTypeActionSheet', PostSortTypeActionSheet);
-registerSheet('postSortPeriodActionSheet', PostSortPeriodActionSheet);
+registerSheet(ACTION_SHEET.SORT_TYPE, PostsSortActionSheet);
+registerSheet(ACTION_SHEET.SORT_PERIOD, PostsSortActionSheet);
 
 export {ACTION_SHEET};

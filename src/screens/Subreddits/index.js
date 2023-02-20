@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {CustomList, Loader} from '../../components';
-import {SCREEN_NAMES} from '../../constants';
+import {CustomList, CustomText, Loader} from '../../components';
+import {commonStyles, SCREEN_NAMES} from '../../constants';
 import {subRedditsRequest} from '../../redux/actions';
-import {appColors} from '../../theme';
+import styles from './styles';
 
 const SubredditsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -15,41 +15,36 @@ const SubredditsScreen = ({navigation}) => {
     dispatch(subRedditsRequest());
   }, []);
 
+  const handlePress = useCallback(
+    item =>
+      navigation.navigate(SCREEN_NAMES.POSTS, {
+        selectedSubreddit: item?.item?.data?.display_name_prefixed,
+      }),
+    [],
+  );
+
   const renderItem = useCallback(
     item => (
       <Pressable
         hitSlop={70}
-        style={{backgroundColor: appColors.opacityAdjusted, padding: 20}}
-        onPress={() =>
-          navigation.navigate(SCREEN_NAMES.POSTS, {
-            selectedSubreddit: item?.item?.data?.display_name_prefixed,
-          })
-        }>
-        <Text
-          style={{
-            fontSize: 16,
-            color: appColors.blue,
-            textAlign: 'center',
-          }}>
-          {item?.item.data?.display_name_prefixed}
-        </Text>
+        style={styles.pressable}
+        onPress={() => handlePress(item)}>
+        <CustomText
+          string={item?.item.data?.display_name_prefixed}
+          style={styles.subredditName}
+        />
       </Pressable>
     ),
     [],
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: appColors.white}}>
-      <Text
-        style={{
-          fontSize: 16,
-          color: appColors.black,
-          textAlign: 'center',
-          marginBottom: 10,
-          fontWeight: 'bold',
-        }}>
-        Subscribed subreddits
-      </Text>
+    <View style={commonStyles.whiteContainer}>
+      <CustomText
+        string={'Subscribed subreddits'}
+        style={[commonStyles.bold20, styles.headerText]}
+      />
+
       {loading ? (
         <Loader />
       ) : (

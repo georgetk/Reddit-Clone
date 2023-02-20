@@ -1,23 +1,23 @@
 import React, {createRef, useCallback, useEffect, useRef} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {SheetManager} from 'react-native-actions-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {ACTION_SHEET} from '../../components/PostFiltersActionSheet/sheets';
-import {SORT_TYPE_KEYS} from '../../constants';
+import {commonStyles, SORT_TYPE_KEYS} from '../../constants';
 import {postsRequest} from '../../redux/actions';
 import {
   postsSortPeriodChange,
   postsSortTypeChange,
 } from '../../redux/actions/postsActions';
-import {appColors} from '../../theme';
 import {sortPeriodData, sortTypeData} from './data';
-import {AppHeader, Loader} from '../../components';
+import {AppHeader, CustomText, Loader} from '../../components';
 import PostList from '../../components/PostList';
+import styles from './styles';
 
 const PostsScreen = ({navigation, route}) => {
-  const dispatch = useDispatch();
-
   const {selectedSubreddit} = route.params;
+
+  const dispatch = useDispatch();
 
   const {
     posts,
@@ -80,30 +80,25 @@ const PostsScreen = ({navigation, route}) => {
     });
   }, []);
 
+  const sortLabel =
+    selectedSort === SORT_TYPE_KEYS.TOP ||
+    selectedSort === SORT_TYPE_KEYS.CONTROVERSIAL
+      ? `${selectedSort} ${selectedSortPeriodValue}`
+      : selectedSort;
+
   return (
-    <View style={{flex: 1, backgroundColor: appColors.white}}>
-      <AppHeader onPress={() => navigation.goBack()} />
-      <Pressable
-        style={{
-          borderColor: appColors.blue,
-          padding: 5,
-          borderWidth: 1,
-          alignSelf: 'flex-start',
-          marginBottom: 10,
-          marginTop: 20,
-        }}
-        onPress={handleSortButtonClick}>
-        <Text style={{fontSize: 16, color: appColors.blue}}>
-          {`${(
-            selectedSort +
-            (selectedSort === SORT_TYPE_KEYS.TOP ||
-            selectedSort === SORT_TYPE_KEYS.CONTROVERSIAL
-              ? ` ${selectedSortPeriodValue}`
-              : '')
-          )?.toUpperCase()} POSTS`}
-        </Text>
+    <View style={commonStyles.whiteContainer}>
+      <AppHeader navigation={navigation} />
+
+      <Pressable style={styles.pressable} onPress={handleSortButtonClick}>
+        <CustomText
+          string={`${sortLabel.toUpperCase()} POSTS`}
+          style={styles.sortTypeText}
+        />
       </Pressable>
+
       {loading ? <Loader /> : null}
+
       {posts?.length > 0 ? (
         <PostList
           posts={posts}

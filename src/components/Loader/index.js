@@ -1,16 +1,10 @@
 import React from 'react';
-import {ActivityIndicator, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {appColors} from '../../theme';
+import styles from './styles';
 
 const Loader = () => (
-  <View
-    style={{
-      justifyContent: 'center',
-      alignItems: 'center',
-      ...StyleSheet.absoluteFill,
-      position: 'absolute',
-      zIndex: 10,
-    }}>
+  <View style={styles.loader}>
     <ActivityIndicator size={'large'} color={appColors.blue} />
   </View>
 );

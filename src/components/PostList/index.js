@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {Pressable, Text} from 'react-native';
-import {SCREEN_NAMES} from '../../constants';
-import {appColors} from '../../theme';
+import {Pressable} from 'react-native';
+import {commonStyles, SCREEN_NAMES} from '../../constants';
 import CustomImage from '../CustomImage';
 import CustomList from '../CustomList';
+import CustomText from '../CustomText';
 import CustomVideo from '../CustomVideo';
+import styles from './styles';
 
 const PostList = ({posts, onViewableItemsChanged, videoRef}) => {
   const navigation = useNavigation();
@@ -34,27 +35,23 @@ const PostList = ({posts, onViewableItemsChanged, videoRef}) => {
     return;
   }, []);
 
+  const handleOnPress = useCallback(data => {
+    navigation.navigate(SCREEN_NAMES.COMMENTS, {
+      title: data?.title,
+      subreddit: data?.subreddit_name_prefixed,
+      postId: data?.id,
+    });
+  }, []);
+
   const renderItem = useCallback(({item, index}) => {
     const {data} = item;
 
     return (
       <Pressable
         key={data?.id}
-        style={{
-          backgroundColor: appColors.opacityAdjusted,
-          padding: 10,
-          width: '100%',
-          borderWidth: 1,
-          borderColor: appColors.blue,
-        }}
-        onPress={() => {
-          navigation.navigate(SCREEN_NAMES.COMMENTS, {
-            title: data?.title,
-            subreddit: data?.subreddit_name_prefixed,
-            postId: data?.id,
-          });
-        }}>
-        <Text style={{fontWeight: 'bold', fontSize: 16}}>{data.title}</Text>
+        style={styles.pressable}
+        onPress={() => handleOnPress(data)}>
+        <CustomText string={data.title} style={commonStyles.bold20} />
         {renderMedia(data.post_hint, data, index)}
       </Pressable>
     );
