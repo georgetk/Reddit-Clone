@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {STORAGE_KEYS} from '../../constants';
+import {ENV_VARS, STORAGE_KEYS} from '../../constants';
 import {getData} from '../../utils';
 
-const BASE_URL = 'https://oauth.reddit.com';
+const BASE_URL = ENV_VARS.BASE_URL;
 
 const HEADERS = {
   'Content-Type': 'application/json; charset=utf-8',

@@ -1,4 +1,5 @@
 import commonStyles from './commonStyles';
+import ENV_VARS from './envVariables';
 import {
   SORT_TYPE_KEYS,
   SORT_TYPE_VALUES,
@@ -16,4 +17,5 @@ export {
   SCREEN_NAMES,
   STORAGE_KEYS,
   commonStyles,
+  ENV_VARS,
 };
